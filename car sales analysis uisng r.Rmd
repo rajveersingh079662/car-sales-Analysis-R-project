@@ -1,0 +1,296 @@
+---
+title: "CAR SALES ANALYSIS USING R"
+author: "RAJVEER SINGH"
+date: "2026-09-11"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# 1 .Introduction
+
+The automobile industry generates a large amount of sales data that can be analyzed to understand market trends, customer preferences, and business performance. This project focuses on analyzing a car sales dataset using the R programming language.
+
+The main objective of this project is to import the car sales data, clean and prepare the dataset, perform exploratory data analysis, and create different graphs and visualizations. The analysis helps identify important patterns and relationships in car sales, such as the performance of different car brands, sales prices, years, and other relevant variables.
+
+R Markdown is used to combine R code, output, graphs, interpretations, and conclusions into one complete report.
+
+# 2. OBJECTIVEs
+
+The main objective of this project is to perform an exploratory analysis of the car sales dataset using the R programming language and identify meaningful patterns and insights from the available data.
+
+The specific objectives of this project are:
+
+To import and understand the car sales dataset using R programming and examine the structure and characteristics of the data.
+To clean and prepare the dataset by identifying and handling missing values, duplicate records, and inconsistent data.
+To perform statistical analysis on important variables such as car selling price, manufacturing year, and other numerical features available in the dataset.
+To analyze different car brands and compare their number of cars and average selling prices.
+To study the relationship between car characteristics and selling price, such as the manufacturing year and price of the vehicle.
+
+# 3. Database and Data Importing
+
+The dataset used in this project contains information related to car sales. The data includes details such as car manufacturer, model, sales, price, engine size, horsepower, fuel efficiency, and other important characteristics.
+
+The dataset is imported into R from a CSV file for further analysis.
+
+```{r}
+# Import the dataset
+
+car_data <- read.csv("Car_sales.csv")
+
+# Display the first six rows
+
+head(car_data)
+```
+
+## Explanation of Code
+
+The `read.csv()` function is used to import the CSV dataset into R.
+
+The imported dataset is stored in the variable `car_data`.
+
+The `head()` function displays the first six rows of the dataset and helps us understand the available data.
+
+# 4. Data Cleaning
+
+Data cleaning is an important step in data analysis. Real-world datasets may contain missing values, duplicate records, incorrect data types, or inconsistent information.
+
+## Checking Missing Values
+
+```{r}
+# Check missing values in each column
+colSums(is.na(car_data))
+```
+
+## Explanation
+
+The `is.na()` function checks for missing values in the dataset.
+
+The `colSums()` function calculates the total number of missing values in each column.
+
+## Removing Missing Values
+
+```{r}
+# Remove rows containing missing values
+car_data <- na.omit(car_data)
+```
+
+## Explanation
+
+The `na.omit()` function removes records containing missing values. This helps ensure that incomplete data does not affect the analysis.
+
+## Checking Duplicate Records
+
+```{r}
+# Count duplicate rows
+sum(duplicated(car_data))
+```
+
+## Removing Duplicate Records
+
+```{r}
+# Remove duplicate records
+car_data <- unique(car_data)
+```
+
+## Explanation
+
+The `duplicated()` function identifies duplicate records.
+
+The `distinct()` function removes duplicate rows from the dataset.
+
+After performing these cleaning steps, the dataset becomes more reliable for analysis and visualization.
+
+# 5. Data Analysis
+
+After cleaning the dataset, statistical analysis is performed to understand the important characteristics of the car sales data.
+
+## Average Car Price
+
+```{r}
+mean(car_data$Price_in_thousands)
+```
+
+### Explanation
+
+The `mean()` function calculates the average price of cars in the dataset. The prices are represented in thousands.
+
+## Maximum Car Price
+
+```{r}
+max(car_data$Price_in_thousands)
+```
+
+### Explanation
+
+The `max()` function identifies the highest car price in the dataset.
+
+## Minimum Car Price
+
+```{r}
+min(car_data$Price_in_thousands, na.rm = TRUE)
+```
+
+### Explanation
+
+The `min()` function identifies the lowest car price in the dataset.
+
+## Median Car Price
+
+```{r}
+median(car_data$Price_in_thousands, na.rm = TRUE)
+```
+
+### Explanation
+
+The `median()` function finds the middle value of the car prices after arranging them in order.
+
+## Average Car Sales
+
+```{r}
+mean(car_data$Sales_in_thousands)
+```
+
+### Explanation
+
+The `mean()` function calculates the average car sales in the dataset. Sales are represented in thousands.
+
+The basic statistical analysis helps us understand the overall distribution and range of car prices and sales.
+
+# 6. Analysis by Car Manufacturer
+
+The following analysis counts the number of cars available for each manufacturer.
+
+```{r}
+manufacturer_count <- table(car_data$Manufacturer)
+
+manufacturer_count
+```
+
+### Explanation
+
+The `table()` function counts how many cars belong to each manufacturer.
+
+This analysis helps us compare the representation of different car manufacturers in the dataset.
+
+## Average Price by Manufacturer
+
+```{r}
+average_price <- tapply(
+  car_data$Price_in_thousands,
+  car_data$Manufacturer,
+  mean
+)
+
+average_price
+```
+
+### Explanation
+
+The `tapply()` function calculates the average car price for each manufacturer.
+
+The first argument contains the car prices, the second argument contains the manufacturer names, and the `mean` function calculates the average price for each manufacturer.
+
+## Interpretation
+
+This analysis groups the cars according to their manufacturers and calculates the number of cars and average price for each manufacturer.
+
+It helps identify:
+
+- Which manufacturers have more cars in the dataset.
+- Which manufacturers have higher average car prices.
+- Differences in car prices between different manufacturers.
+
+# 7. Graph and plot creation
+
+
+1. Bar Plot – Number of Cars by Manufacturer
+```{r}
+manufacturer_count <- table(car_data$Manufacturer)
+
+barplot(
+  manufacturer_count,
+  main = "Number of Cars by Manufacturer",
+  xlab = "Manufacturer",
+  ylab = "Number of Cars",
+  las = 2
+)
+```
+Interpretation:
+This bar plot shows the number of cars available for each manufacturer in the dataset. The height of each bar represents the number of car models associated with a particular manufacturer. Manufacturers with taller bars have more cars represented in the dataset. The graph makes it easy to compare different manufacturers. It helps identify the manufacturers with the highest and lowest number of cars.
+
+2. Pie Chart – Distribution of Vehicle Types
+
+```{r}
+vehicle_count <- table(car_data$Vehicle_type)
+
+pie(
+  vehicle_count,
+  main = "Distribution of Vehicle Types"
+)
+```
+Interpretation:
+The pie chart shows the proportion of different vehicle types in the dataset. Each section represents a particular vehicle category and its share of the total cars. Larger sections indicate vehicle types that occur more frequently in the dataset. This graph provides a simple visual comparison of the different vehicle categories. It helps identify the most common vehicle type.
+
+3. Histogram – Distribution of Car Prices
+
+```{r}
+hist(
+  car_data$Price_in_thousands,
+  main = "Distribution of Car Prices",
+  xlab = "Price in Thousands"
+)
+```
+Interpretation:
+The histogram shows how car prices are distributed across different price ranges. The height of each bar represents the number of cars within a particular price range. It helps identify the price range where most cars are concentrated. The graph also shows whether there are more low-priced or high-priced cars in the dataset. This provides a better understanding of the overall distribution of car prices.
+
+4. Dot Chart – Car Sales
+
+```{r}
+dotchart(
+  car_data$Sales_in_thousands,
+  main = "Dot Chart of Car Sales",
+  xlab = "Sales in Thousands"
+)
+```
+Interpretation:
+The dot chart displays the sales values of cars in the dataset. Each dot represents a particular sales value measured in thousands. The position of the dots helps compare different sales values easily. Dots that are farther along the axis represent higher sales values. The graph helps identify variations and possible unusually high or low sales values.
+
+# 8. Interpretation of Results
+
+The car sales dataset was analyzed using basic R programming techniques and different graphical representations. The bar plot of manufacturers showed the number of cars associated with each manufacturer, making it easy to compare the representation of different automobile companies in the dataset.
+
+The pie chart of vehicle types showed the proportion of different categories of vehicles. This helped in understanding which vehicle types are more commonly represented in the dataset.
+
+The histogram of car prices showed the distribution of car prices across different price ranges. It helped identify the range in which most car prices are concentrated and provided an overview of the variation in car prices.
+
+The dot chart of car sales displayed the sales values of different cars. It showed that sales vary significantly among different models, with some cars having higher sales values than others.
+
+The bar plot of vehicle types provided a direct comparison of the number of cars in each vehicle category. This made it easier to identify the most and least represented vehicle types.
+
+Overall, the graphical analysis shows that the dataset contains considerable variation in manufacturers, vehicle types, car prices, and sales. These visualizations help in understanding the patterns and characteristics of the car sales data.
+
+Findings
+
+Based on the analysis, the following findings were obtained:
+
+1. The dataset contains cars from different manufacturers and vehicle categories.
+2. Some manufacturers have more car models represented in the dataset than others.
+3. Different vehicle types have different levels of representation.
+4. Car prices are distributed across different price ranges, showing variation in the cost of vehicles.
+5. Car sales differ among different cars, indicating that some models have higher sales than others.
+6. The graphical analysis makes it easier to compare manufacturers, vehicle types, prices, and sales.
+7. Basic R functions such as barplot(), pie(), hist(), and dotchart() were useful for visualizing the dataset.
+
+# 9. Conclusion
+
+This project successfully analyzed the Car Sales dataset using basic R programming techniques. The dataset was imported into R and examined to understand its structure and characteristics. Data cleaning was performed by checking for missing values and duplicate records.
+
+Basic statistical analysis and graphical visualizations were used to understand important aspects of the dataset. Bar plots were used to compare manufacturers and vehicle types, while the pie chart showed the distribution of vehicle categories. The histogram helped analyze the distribution of car prices, and the dot chart was used to visualize variations in car sales.
+
+The analysis shows that car manufacturers, vehicle types, prices, and sales vary across the dataset. These differences provide useful insights into the characteristics of the automobile market.
+
+Overall, this project demonstrates that R programming can be effectively used for data importing, data cleaning, data analysis, and visualization. The use of basic R functions makes it possible to understand and interpret real-world datasets without using advanced programming techniques such as ggplot2.
